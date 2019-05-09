@@ -1,4 +1,4 @@
-require 'spec_helper'
+require '/tmp/kitchen/spec/spec_helper.rb'
 
 mongodb_user  = 'mongodb'
 mongodb_group = 'mongodb'
@@ -48,12 +48,12 @@ describe port(27017) do
   it { should be_listening }
 end
 
-describe command("mongo --host 172.29.129.10 --quiet --eval 'db.isMaster().ismaster'") do
+describe command("mongo --host node0.internal --quiet --eval 'db.isMaster().ismaster'") do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match 'true' }
 end
 
-describe command("mongo --host 172.29.129.10 --quiet --eval 'db.isMaster().hosts.length'") do
+describe command("mongo --host node0.internal --quiet --eval 'db.isMaster().hosts.length'") do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match '2' }
 end

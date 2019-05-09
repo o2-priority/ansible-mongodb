@@ -1,4 +1,4 @@
-require 'spec_helper'
+require '/tmp/kitchen/spec/spec_helper.rb'
 
 mongodb_user  = 'mongodb'
 mongodb_group = 'mongodb'
