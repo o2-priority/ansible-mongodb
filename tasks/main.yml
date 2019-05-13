@@ -81,7 +81,7 @@
 
 - name: Enable tuned profile to disable transparent-hugepages
   shell: tuned-adm profile no-thp
-  when: tuned|change and mongodb_disable_thp and ansible_os_family|lower == 'redhat'
+  when: tuned is change and mongodb_disable_thp and ansible_os_family|lower == 'redhat'
 
 - name: Start mongodb
   service: name=mongod enabled=yes state=started
