@@ -30,7 +30,7 @@ Features:
       bindIp: "{{ ansible_eth1.ipv4.address }}"
 
   roles:
-    - wunzeco.mongodb
+    - o2-priority.mongodb
 ```
 
 ### MongoDB Replica Set installation
@@ -48,7 +48,7 @@ Features:
     mongodb_replica_set_members: [ "node0.internal:27017", "node1.internal:27017" ]
 
   roles:
-    - wunzeco.mongodb
+    - o2-priority.mongodb
 
 
 - hosts: node0.internal				# PRIMARY
@@ -64,7 +64,7 @@ Features:
     mongodb_replica_set_members: [ "node0.internal:27017", "node1.internal:27017" ]
 
   roles:
-    - wunzeco.mongodb
+    - o2-priority.mongodb
 ```
 
 It is **recommended** that your replica set members have resolveable names. So
@@ -74,14 +74,13 @@ use FQDN for each replica set member (not IP, especially in production).
 
 To run integration tests of this role
 
+PLATFORM = ubuntu or centos
 ```
-PLATFORM=ubuntu-1404     # OR ubuntu-1604, centos
-kitchen verify $PLATFORM && kitchen destroy $PLATFORM
+kitchen test $PLATFORM --destroy=never && docker kill node0 node1 && docker rm node0 node1
 ```
 
 > **Note:**
->	`kitchen test` command is not appropriate for this role because both kitchen
->    suites (instances) need to be up and running for all tests to pass.
+> `--destroy=never` must be supplied because two nodes are required to be running for all the tests to pass. As a consequence of this `$PLATFORM` must also be specified for the `kitchen test` command otherwise it will not work because of the `instance_name` property. The `docker` commands remove the left over containers for the next platform run
 
 
 ## ToDo:
