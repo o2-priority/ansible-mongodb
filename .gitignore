@@ -2,3 +2,4 @@
 .kitchen.local.yml
 *.swp
 Gemfile.lock
+.idea/

@@ -80,3 +80,13 @@
 
 - include: replica_set.yml
   when: mongodb_create_replica_set
+
+- name: Create Feature Compatibility Version Config
+  template: src=setFeatureCompatibilityVersion.js.j2 dest=/var/tmp/setFeatureCompatibilityVersion.js
+  when: mongodb_is_primary
+
+- name: Set Feature Compatibility Version on mongodb primary
+  shell: >
+    mongo --host {{ mongodb_net.bindIp }} --port {{ mongodb_net.port }} \
+        --quiet --eval 'load("/var/tmp/setFeatureCompatibilityVersion.js")'
+  when: mongodb_is_primary
