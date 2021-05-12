@@ -81,12 +81,19 @@
 - include: replica_set.yml
   when: mongodb_create_replica_set
 
+- name: Check if it is master
+  shell: >
+    mongo --host {{ mongodb_net.bindIp }} --port {{ mongodb_net.port }} \
+        --quiet --eval "db.isMaster().ismaster"
+  register: is_master
+  when: mongodb_is_primary
+
 - name: Create Feature Compatibility Version Config
   template: src=setFeatureCompatibilityVersion.js.j2 dest=/var/tmp/setFeatureCompatibilityVersion.js
-  when: mongodb_is_primary
+  when: is_master.stdout_lines == "true"
 
 - name: Set Feature Compatibility Version on mongodb primary
   shell: >
     mongo --host {{ mongodb_net.bindIp }} --port {{ mongodb_net.port }} \
         --quiet --eval 'load("/var/tmp/setFeatureCompatibilityVersion.js")'
-  when: mongodb_is_primary
+  when: is_master.stdout_lines == "true"
