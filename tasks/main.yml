@@ -86,7 +86,6 @@
     mongo --host {{ mongodb_net.bindIp }} --port {{ mongodb_net.port }} \
         --quiet --eval "db.isMaster().ismaster"
   register: is_master
-  when: mongodb_is_primary
 
 - name: Create Feature Compatibility Version Config
   template: src=setFeatureCompatibilityVersion.js.j2 dest=/var/tmp/setFeatureCompatibilityVersion.js
